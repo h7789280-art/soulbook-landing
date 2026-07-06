@@ -1,0 +1,58 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const items = (await getCollection('faq'))
+  .filter((f) => !f.data.draft)
+  .sort((a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime());
+
+// Render each answer's markdown body for the accordion.
+const rendered = await Promise.all(
+  items.map(async (item) => ({ item, Content: (await render(item)).Content })),
+);
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: items.map((f) => ({
+    '@type': 'Question',
+    name: f.data.title,
+    acceptedAnswer: { '@type': 'Answer', text: f.data.description },
+  })),
+};
+---
+
+<Base
+  title="Частые вопросы (FAQ) — Вершина Души"
+  description="Ответы на частые вопросы о приложении «Вершина Души»: учения, AI-проводник, подписка и приватность."
+  canonical="/faq/"
+>
+  {items.length > 0 && (
+    <Fragment slot="head">
+      <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+    </Fragment>
+  )}
+
+  <main class="wrap hub">
+    <a class="hub-back" href="/">← На главную</a>
+    <span class="eyebrow">Помощь</span>
+    <h1>Частые вопросы</h1>
+    <p class="lead">Всё, что важно знать о «Вершине Души».</p>
+
+    {items.length === 0 ? (
+      <p class="hub-empty">Скоро здесь появятся ответы на частые вопросы.</p>
+    ) : (
+      <div class="faq-wrap">
+        {rendered.map(({ item, Content }) => (
+          <details class="faq-item" id={item.id}>
+            <summary>{item.data.title}</summary>
+            <div class="faq-body">
+              <Content />
+              <p><a href={`/faq/${item.id}/`}>Открыть отдельной страницей →</a></p>
+            </div>
+          </details>
+        ))}
+      </div>
+    )}
+  </main>
+</Base>

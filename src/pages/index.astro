@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Pain from '../components/Pain.astro';
+import Solution from '../components/Solution.astro';
+import AiGuide from '../components/AiGuide.astro';
+import Teachings from '../components/Teachings.astro';
+import Features from '../components/Features.astro';
+import Difference from '../components/Difference.astro';
+import Steps from '../components/Steps.astro';
+import Final from '../components/Final.astro';
+
+const site = 'https://start.soulbook.life';
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Вершина Души',
+  alternateName: 'Apex Soul',
+  url: site,
+  inLanguage: 'ru',
+  description:
+    'Девять древних учений в одном приложении и личный AI-проводник, который заменяет консультанта и всегда рядом — 24/7.',
+};
+
+const appSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Вершина Души',
+  alternateName: 'Apex Soul',
+  applicationCategory: 'LifestyleApplication',
+  operatingSystem: 'Web, iOS, Android',
+  url: site,
+  inLanguage: 'ru',
+  description:
+    'AI-платформа самопознания: девять древних учений (Матрица Судьбы, нумерология, астрология, Таро, Human Design, Сюцай и не только) и личный AI-проводник, который понимает тебя — 24/7.',
+  offers: {
+    '@type': 'Offer',
+    price: '9',
+    priceCurrency: 'EUR',
+    description: 'Подписка, 3 дня бесплатно',
+  },
+};
+---
+
+<Base>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(appSchema)} />
+  </Fragment>
+
+  <Hero />
+  <Pain />
+  <Solution />
+  <div class="divider"></div>
+  <AiGuide />
+  <Teachings />
+  <Features />
+  <Difference />
+  <div class="divider"></div>
+  <Steps />
+  <Final />
+</Base>

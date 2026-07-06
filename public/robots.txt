@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://start.soulbook.life/sitemap-index.xml

@@ -1,6 +1,16 @@
+# build output
+dist/
+# generated Astro types
+.astro/
+# dependencies
+node_modules/
+
 .vercel
 
 # env files (never commit real secrets)
 .env
 .env.*
 !.env.example
+
+# logs
+npm-debug.log*

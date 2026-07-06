@@ -1,0 +1,60 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const items = await getCollection('faq');
+  return items.map((item) => ({ params: { slug: item.id }, props: { item } }));
+}
+
+const { item } = Astro.props;
+const { Content } = await render(item);
+
+const site = 'https://start.soulbook.life';
+const path = `/faq/${item.id}/`;
+const url = new URL(path, site).href;
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Главная', item: `${site}/` },
+    { '@type': 'ListItem', position: 2, name: 'FAQ', item: `${site}/faq/` },
+    { '@type': 'ListItem', position: 3, name: item.data.title, item: url },
+  ],
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: item.data.title,
+      acceptedAnswer: { '@type': 'Answer', text: item.data.description },
+    },
+  ],
+};
+---
+
+<Base
+  title={`${item.data.title} — Вершина Души`}
+  description={item.data.description}
+  canonical={path}
+  ogImage={item.data.ogImage ?? '/og-cover.png'}
+  noindex={item.data.draft}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  </Fragment>
+
+  <main class="wrap hub">
+    <a class="hub-back" href="/faq/">← Все вопросы</a>
+    <span class="hub-cat">{item.data.category}</span>
+    <h1>{item.data.title}</h1>
+    <article class="prose">
+      <Content />
+    </article>
+  </main>
+</Base>

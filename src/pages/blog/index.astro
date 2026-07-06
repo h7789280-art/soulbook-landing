@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const posts = (await getCollection('blog'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+---
+
+<Base
+  title="Блог — Вершина Души"
+  description="Статьи о самопознании, отношениях, финансах и предназначении — от команды «Вершина Души»."
+  canonical="/blog/"
+>
+  <main class="wrap hub">
+    <a class="hub-back" href="/">← На главную</a>
+    <span class="eyebrow">Блог</span>
+    <h1>Блог</h1>
+    <p class="lead">Статьи о самопознании, отношениях, деньгах и предназначении.</p>
+
+    {posts.length === 0 ? (
+      <p class="hub-empty">Скоро здесь появятся статьи.</p>
+    ) : (
+      <ul class="hub-list">
+        {posts.map((p) => (
+          <li>
+            <a class="hub-card" href={`/blog/${p.id}/`}>
+              <span class="hub-cat">{p.data.category}</span>
+              <h2>{p.data.title}</h2>
+              <p>{p.data.description}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </main>
+</Base>
