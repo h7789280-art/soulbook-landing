@@ -174,6 +174,8 @@ const ogImageURL = new URL(ogImage, base).href;
   footer{background:var(--cream-deep);padding:48px 24px 40px;text-align:center;border-top:1px solid var(--line-soft)}
   footer .fl{font-family:var(--display);font-size:24px;color:var(--gold-deep);margin-bottom:8px}
   footer .ft{font-size:14px;color:var(--ink-faint);margin-bottom:18px}
+  footer .fnav{font-size:14px;margin-bottom:16px}
+  footer .fnav a{font-weight:600}
   footer .fcontacts{font-size:14px;color:var(--ink-soft)}
   footer a{color:var(--gold-deep);text-decoration:none}
   footer a:hover{text-decoration:underline}
@@ -221,6 +223,23 @@ const ogImageURL = new URL(ogImage, base).href;
   .faq-item[open] summary::after{content:"–"}
   .faq-item .faq-body{padding:0 0 22px;color:var(--ink-soft);font-size:16px;line-height:1.7}
   .faq-item .faq-body a{color:var(--gold-deep);text-decoration:underline}
+  /* Question Engine (FAQ) — breadcrumbs, category index, related, CTA */
+  .crumbs{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:13px;color:var(--ink-faint);margin-bottom:22px;letter-spacing:.01em}
+  .crumbs a{color:var(--gold-deep);text-decoration:none}
+  .crumbs a:hover{color:var(--ink)}
+  .crumbs span[aria-hidden]{color:var(--line)}
+  .crumbs .crumbs-current{color:var(--ink-soft)}
+  .faq-group{margin-top:44px}
+  .faq-group h2{font-family:var(--display);font-size:27px;font-weight:600;color:var(--ink);margin:0 0 14px;padding-bottom:10px;border-bottom:1px solid var(--line-soft)}
+  .faq-index{list-style:none;display:grid;gap:2px}
+  .faq-index li{padding:0}
+  .faq-index a{display:block;text-decoration:none;color:var(--ink);font-size:18px;line-height:1.5;padding:11px 0;border-bottom:1px solid var(--line-soft);transition:color .15s ease}
+  .faq-index a:hover{color:var(--gold-deep)}
+  .hub-related{margin-top:56px;padding-top:8px;border-top:1px solid var(--line-soft)}
+  .hub-related h2{font-family:var(--display);font-size:27px;font-weight:600;color:var(--ink);margin:24px 0 0}
+  .hub-related .hub-card h3{font-size:21px;margin:0}
+  .hub-cta{margin-top:56px;background:var(--cream-card);border:1px solid var(--line-soft);border-radius:20px;padding:36px 32px;text-align:center;box-shadow:0 10px 30px rgba(168,139,71,0.08)}
+  .hub-cta p{font-family:var(--display);font-size:clamp(21px,3.4vw,26px);color:var(--ink);margin:0 0 24px;max-width:30ch;margin-left:auto;margin-right:auto;line-height:1.35}
 </style>
 </head>
 <body>

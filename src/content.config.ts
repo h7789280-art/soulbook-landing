@@ -6,10 +6,15 @@ import { glob } from 'astro/loaders';
 // field lets an author pin an explicit slug if ever needed.
 const contentSchema = z.object({
   title: z.string(),
-  description: z.string(),
+  // Optional: for faq it is derived from the answer body at build time
+  // (see src/lib/faq.ts) so a new question needs only title/category/slug/related.
+  description: z.string().optional(),
   slug: z.string().optional(),
   category: z.string(),
-  pubDate: z.coerce.date(),
+  // Related question slugs (faq). Missing targets are silently skipped.
+  related: z.array(z.string()).optional(),
+  // Optional: faq questions are ordered by title, not date.
+  pubDate: z.coerce.date().optional(),
   ogImage: z.string().optional(),
   // Demo/placeholder entries set draft:true → excluded from listings + noindex.
   draft: z.boolean().default(false),

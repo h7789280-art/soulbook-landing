@@ -28,11 +28,13 @@ src/
     index.astro           ← собирает блоки лендинга + JSON-LD (WebSite + SoftwareApplication)
     blog/index.astro      ← список статей (draft скрыты)
     blog/[slug].astro     ← статья + JSON-LD Article + BreadcrumbList
-    faq/index.astro       ← аккордеон вопросов (<details>, якорь = id) + JSON-LD FAQPage
-    faq/[slug].astro      ← отдельная страница вопроса + BreadcrumbList
+    faq/index.astro       ← список вопросов по категориям (ссылки на страницы) + JSON-LD FAQPage
+    faq/[slug].astro      ← страница вопроса: крошки + ответ + «Похожие» + CTA + Article/BreadcrumbList
+  components/Cta.astro    ← общий CTA контент-хаба (ведёт в бота)
+  lib/faq.ts              ← Question Engine: CATEGORY_LABELS, вывод description, группировка
   content/
     blog/*.md             ← статьи
-    faq/*.md              ← вопросы
+    faq/*.md              ← вопросы (Question Engine)
   content.config.ts       ← Zod-схема коллекций blog + faq
 public/
   favicon.png             ← из numerolog-app (public/images/favicon.png)
@@ -50,7 +52,8 @@ docs/legacy-index.html    ← исходный монолитный лендин
 - **SEO на каждой странице через `Base.astro`:** `title`, `description`, `canonical`,
   `ogType`, `ogImage`, `noindex` передаются пропсами. База canonical/OG —
   `https://start.soulbook.life` (задано в `astro.config.mjs → site`).
-- Блог и FAQ пока **НЕ** линкуются из навигации главной — ссылки добавим с реальным контентом.
+- **FAQ** линкуется из футера лендинга (`Footer.astro` → `/faq/`). **Блог** пока не линкуем
+  (нет реального контента).
 
 ## Как добавить статью (blog)
 
@@ -69,26 +72,54 @@ draft: false               # true → скрыта из списка + noindex +
 Тело статьи в Markdown. Первый `##` — подзаголовок.
 ```
 
-## Как добавить вопрос (faq)
+## Как добавить вопрос (faq) — Question Engine
 
-Создать `src/content/faq/<slug>.md`. Появится в аккордеоне `/faq/` (якорь `#<slug>`)
-и отдельной страницей `/faq/<slug>/`.
+**Один вопрос = один `.md`-файл в `src/content/faq/`. Больше ничего не трогать** —
+шаблон, `/faq/`, sitemap, «Похожие вопросы», группировка и JSON-LD собираются
+автоматически. Масштабируется на тысячи вопросов без изменений кода.
+
+Создать `src/content/faq/<slug>.md`. Появится страницей `/faq/<slug>/` и в списке
+`/faq/` под своей категорией.
 
 ```md
 ---
-title: "Текст вопроса?"
-description: "Краткий ответ — идёт в JSON-LD FAQPage и в OG-описание."
-category: "Общее"
-pubDate: 2026-07-15
-draft: false
+title: "Текст вопроса?"        # H1 и <title>; можно менять в любой момент
+category: "matrica-sudby"      # slug категории из CATEGORY_LABELS (src/lib/faq.ts)
+slug: "tekst-voprosa"          # опц., документирует URL; сам URL = имя файла
+related:                       # опц., слаги похожих вопросов; несуществующие молча пропускаются
+  - kak-rasschitat-matricu-sudby
+  - chto-takoe-arkany
 ---
 
-Полный ответ в Markdown.
+### Краткий ответ
+
+Первый абзац этой секции автоматически становится SEO-описанием (`description`,
+OG, JSON-LD), обрезается до ~175 символов по границе предложения.
+
+Дальше — полный ответ в Markdown.
 ```
 
+- **`slug` (имя файла) НЕИЗМЕНЯЕМ** — это постоянный URL. `title` можно менять
+  свободно, slug остаётся прежним (критично для SEO).
+- **`description` писать НЕ нужно** — выводится из тела (`src/lib/faq.ts →
+  faqDescription`). Можно переопределить, добавив поле `description:` во frontmatter.
+- **`pubDate` не нужен** — вопросы в списке сортируются по заголовку внутри категории.
+- **Новая категория = одна строка** в `CATEGORY_LABELS` (`src/lib/faq.ts`): пара
+  `slug → Русский ярлык`. Порядок групп на `/faq/` = порядок ключей в этом объекте.
+- **CTA** рендерится компонентом `src/components/Cta.astro` на каждой странице —
+  в контенте вопроса CTA не пишем.
+- `draft: true` → страница не собирается, не в списке, не в sitemap.
+
+**JSON-LD:** страница вопроса — `Article` (редакционный ответ одного автора, не
+community-Q&A) + `BreadcrumbList`; индекс `/faq/` — `FAQPage` со всеми вопросами.
+
 **Frontmatter-схема (обе коллекции)** — `src/content.config.ts`:
-`title` (string), `description` (string), `slug` (string, опц.), `category` (string),
-`pubDate` (date), `ogImage` (string, опц.), `draft` (boolean, по умолч. false).
+`title` (string, обяз.), `category` (string, обяз.), `slug` (string, опц.),
+`related` (string[], опц., только faq), `description` (string, опц. — для faq
+выводится из тела), `pubDate` (date, опц.), `ogImage` (string, опц.),
+`draft` (boolean, по умолч. false).
+
+Массовый импорт партии: `node scripts/import-faq-partiya-1.mjs <файл.md>`.
 
 ## Команды
 

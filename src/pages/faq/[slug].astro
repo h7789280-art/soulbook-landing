@@ -1,9 +1,11 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import Cta from '../../components/Cta.astro';
+import { categoryLabel, faqDescription } from '../../lib/faq';
 
 export async function getStaticPaths() {
-  const items = await getCollection('faq');
+  const items = (await getCollection('faq')).filter((i) => !i.data.draft);
   return items.map((item) => ({ params: { slug: item.id }, props: { item } }));
 }
 
@@ -11,50 +13,90 @@ const { item } = Astro.props;
 const { Content } = await render(item);
 
 const site = 'https://start.soulbook.life';
+const faqPath = '/faq/';
 const path = `/faq/${item.id}/`;
 const url = new URL(path, site).href;
+const description = faqDescription(item);
+const image = new URL(item.data.ogImage ?? '/og-cover.png', site).href;
+
+// Resolve "related" slugs to real, published questions; missing ones are dropped.
+const all = await getCollection('faq');
+const byId = new Map(all.filter((i) => !i.data.draft).map((i) => [i.id, i]));
+const related = (item.data.related ?? [])
+  .map((slug) => byId.get(slug))
+  .filter((r): r is NonNullable<typeof r> => Boolean(r) && r!.id !== item.id);
+
+// JSON-LD: an individual question is a single, site-authored editorial answer
+// (not community Q&A), so Article fits Google's editorial-content guidance
+// better than QAPage (user-generated) or FAQPage (rich-result-restricted).
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: item.data.title,
+  description,
+  inLanguage: 'ru',
+  mainEntityOfPage: url,
+  image,
+  author: { '@type': 'Organization', name: 'Вершина Души', url: site },
+  publisher: { '@type': 'Organization', name: 'Вершина Души', url: site },
+  ...(item.data.pubDate ? { datePublished: item.data.pubDate.toISOString() } : {}),
+};
 
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Главная', item: `${site}/` },
-    { '@type': 'ListItem', position: 2, name: 'FAQ', item: `${site}/faq/` },
+    { '@type': 'ListItem', position: 2, name: 'Вопросы и ответы', item: `${site}${faqPath}` },
     { '@type': 'ListItem', position: 3, name: item.data.title, item: url },
-  ],
-};
-
-const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: item.data.title,
-      acceptedAnswer: { '@type': 'Answer', text: item.data.description },
-    },
   ],
 };
 ---
 
 <Base
   title={`${item.data.title} — Вершина Души`}
-  description={item.data.description}
+  description={description}
   canonical={path}
   ogImage={item.data.ogImage ?? '/og-cover.png'}
   noindex={item.data.draft}
 >
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
     <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
   </Fragment>
 
   <main class="wrap hub">
-    <a class="hub-back" href="/faq/">← Все вопросы</a>
-    <span class="hub-cat">{item.data.category}</span>
+    <nav class="crumbs" aria-label="Хлебные крошки">
+      <a href="/">Главная</a>
+      <span aria-hidden="true">→</span>
+      <a href={faqPath}>Вопросы и ответы</a>
+      <span aria-hidden="true">→</span>
+      <span class="crumbs-current">{item.data.title}</span>
+    </nav>
+
+    <span class="hub-cat">{categoryLabel(item.data.category)}</span>
     <h1>{item.data.title}</h1>
+
     <article class="prose">
       <Content />
     </article>
+
+    {related.length > 0 && (
+      <section class="hub-related" aria-label="Похожие вопросы">
+        <h2>Похожие вопросы</h2>
+        <ul class="hub-list">
+          {related.map((r) => (
+            <li>
+              <a class="hub-card" href={`/faq/${r.id}/`}>
+                <span class="hub-cat">{categoryLabel(r.data.category)}</span>
+                <h3>{r.data.title}</h3>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <Cta />
   </main>
 </Base>
