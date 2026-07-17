@@ -1,0 +1,238 @@
+commit 990412f4f5967494f723926b7fb54b76ccf3286e
+Author: Elena Kuchman <h7789280@gmail.com>
+Date:   Mon Jul 6 21:29:09 2026 +0300
+
+    copy(hero): уточнить подпись Базы знаний под перечень тем
+    
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+ src/components/Hero.astro | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 5cfa77408a5c34825f01f6a2320cd0033b3706d3
+Author: Elena Kuchman <h7789280@gmail.com>
+Date:   Mon Jul 6 20:52:36 2026 +0300
+
+    feat(hero): секондари-CTA «Перейти в Базу знаний» + обновлённая подстрока
+    
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+ src/components/Hero.astro | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit 41cf90a2dfdeef5a700da022de1dd13cf91a162f
+Author: Elena Kuchman <h7789280@gmail.com>
+Date:   Mon Jul 6 20:10:32 2026 +0300
+
+    feat(hero): база знаний как secondary-кнопка вместо текст-блока
+    
+    Блок «База знаний →» превращён в outline-кнопку той же геометрии,
+    что primary CTA (padding/radius/шрифт/стрелка), но прозрачную с
+    золотой рамкой 1.5px и лёгкой золотой подложкой на hover.
+    Разделитель-линия убрана — иерархию держит форма кнопки.
+    Порядок: primary → подпись → secondary → подстрока.
+    Стиль вынесен в переиспользуемый класс .cta-secondary в Base.astro.
+    
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+ src/components/Hero.astro |  7 ++-----
+ src/layouts/Base.astro    | 12 ++++++------
+ 2 files changed, 8 insertions(+), 11 deletions(-)
+
+commit d51b0f2f36354761a3593d1f91e943304f873c08
+Author: Elena Kuchman <h7789280@gmail.com>
+Date:   Mon Jul 6 17:49:54 2026 +0300
+
+    fix(hub): вернуть боковые поля страницам Базы знаний + усилить hero-блок
+    
+    1. .hub использовал shorthand padding:96px 0 72px, обнуляя горизонтальный
+       padding от .wrap (0 24px) на общем <main class="wrap hub"> — контент
+       прижимался к кромке на мобильном. Заменил на padding-top/bottom, чтобы
+       .wrap задавал боковые 24px (как у секций лендинга). Затрагивает /faq/,
+       страницы вопросов и /blog/.
+    2. Hero-блок «База знаний»: заголовок clamp(26px,4vw,30px) (золото),
+       подстрока 15.5px тоном --ink-soft (темнее), больше воздуха
+       (margin-top 52px), разделитель 64px, стрелка → на строке заголовка.
+
+ src/components/Hero.astro |  4 ++--
+ src/layouts/Base.astro    | 10 +++++-----
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+commit 858a6176988736e35cf51f679f88bc502c541f86
+Author: Elena Kuchman <h7789280@gmail.com>
+Date:   Mon Jul 6 17:34:39 2026 +0300
+
+    feat(hero): compact «База знаний» link block under CTA note
+    
+    Тихая текстовая ссылка-приглашение на /faq/ в hero: короткий разделитель
+    (--line-soft) + золотой Cormorant-заголовок «База знаний» + мелкий подзаголовок.
+    Без заливки/рамки (quiet luxury), лёгкий hover-потемнение золота, reveal-эффект.
+    Стили в Base.astro. Футер и URL /faq/ не тронуты.
+    
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+ src/components/Hero.astro | 5 +++++
+ src/layouts/Base.astro    | 6 ++++++
+ 2 files changed, 11 insertions(+)
+
+commit b15b873ac91383883155f2adc3d55c94c37a057e
+Author: Elena Kuchman <h7789280@gmail.com>
+Date:   Mon Jul 6 15:28:37 2026 +0300
+
+    Ребрендинг раздела FAQ в «Базу знаний» (представление, URL /faq/ неизменны)
+    
+    - Футер: отдельный блок-раздел «База знаний» (разделитель + Cormorant-мини-заголовок
+      + список ссылок .fsection-links, расширяемый) вместо одиночной ссылки .fnav
+    - /faq/: H1 «База знаний» + подзаголовок, title «База знаний — Вершина Души»,
+      eyebrow убран; JSON-LD FAQPage не тронут
+    - Страницы вопросов: крошка «Вопросы и ответы» → «База знаний» (ссылка на /faq/),
+      синхронно имя в BreadcrumbList JSON-LD
+    - CLAUDE.md: раздел «База знаний», URL /faq/ неизменен, как добавлять ссылки в футер
+    
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+ CLAUDE.md                   | 11 +++++++++--
+ src/components/Footer.astro |  7 ++++++-
+ src/layouts/Base.astro      | 10 +++++++---
+ src/pages/faq/[slug].astro  |  4 ++--
+ src/pages/faq/index.astro   |  7 +++----
+ 5 files changed, 27 insertions(+), 12 deletions(-)
+
+commit d25db29bf7d870a85eaed89dbf2badc195ffbd3d
+Author: Elena Kuchman <h7789280@gmail.com>
+Date:   Mon Jul 6 15:05:56 2026 +0300
+
+    feat(faq): Question Engine v1.0 — шаблон вопроса + первая партия (15 страниц)
+    
+    Future-proof контент-хаб вопросов-ответов: добавление вопроса = один .md
+    в src/content/faq/, всё остальное (шаблон, sitemap, «Похожие», группировка,
+    JSON-LD) собирается автоматически, масштабируется на тысячи страниц.
+    
+    - src/lib/faq.ts: CATEGORY_LABELS (slug→ярлык, порядок групп), вывод
+      description из тела («Краткий ответ», ≤175 симв. по границе предложения),
+      группировка по категориям.
+    - content.config.ts: +related (string[]), description/pubDate опциональны.
+    - faq/[slug].astro: крошки → H1 → ответ → «Похожие вопросы» (битые слаги
+      молча пропускаются) → CTA-компонент; JSON-LD Article + BreadcrumbList
+      (Article — редакционный ответ одного автора, точнее QAPage/FAQPage для
+      такой страницы). Черновики не собираются → не попадают в sitemap.
+    - faq/index.astro: «Вопросы и ответы», группировка по категориям (ссылки на
+      страницы), JSON-LD FAQPage со всеми вопросами.
+    - components/Cta.astro: единый CTA в бота (стиль главного CTA лендинга).
+    - Footer: ссылка «Вопросы и ответы» → /faq/. Блог не линкуем (пуст).
+    - Импорт первой партии (15 вопросов) + scripts/import-faq-partiya-1.mjs;
+      slug неизменяем = постоянный URL. Демо blog/faq удалены.
+    
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+ CLAUDE.md                                          |  61 +++++++++---
+ scripts/import-faq-partiya-1.mjs                   |  62 +++++++++++++
+ src/components/Cta.astro                           |   8 ++
+ src/components/Footer.astro                        |   1 +
+ src/content.config.ts                              |   9 +-
+ src/content/blog/demo-post.md                      |  15 ---
+ .../chem-matrica-otlichaetsya-ot-numerologii.md    |  50 ++++++++++
+ .../faq/chto-oznachaet-arkan-v-centre-matricy.md   |  49 ++++++++++
+ .../faq/chto-pokazyvaet-detskaya-matrica.md        |  50 ++++++++++
+ src/content/faq/chto-takoe-arkany.md               |  47 ++++++++++
+ src/content/faq/chto-takoe-human-design.md         |  50 ++++++++++
+ src/content/faq/chto-takoe-karmicheskij-hvost.md   |  49 ++++++++++
+ src/content/faq/chto-takoe-matrica-sudby.md        |  49 ++++++++++
+ src/content/faq/chto-takoe-rodovye-programmy.md    |  50 ++++++++++
+ src/content/faq/chto-znachit-arkan-v-minuse.md     |  50 ++++++++++
+ src/content/faq/demo-question.md                   |  11 ---
+ src/content/faq/kak-rasschitat-matricu-sudby.md    |  49 ++++++++++
+ ...kak-uznat-prednaznachenie-po-date-rozhdeniya.md |  49 ++++++++++
+ src/content/faq/mozhno-li-izmenit-matricu-sudby.md |  50 ++++++++++
+ .../faq/pochemu-ya-vybirayu-odinakovyh-muzhchin.md |  50 ++++++++++
+ src/content/faq/slozhnye-arkany-v-matrice.md       |  49 ++++++++++
+ .../faq/za-chto-otvechayut-finansy-v-matrice.md    |  50 ++++++++++
+ src/layouts/Base.astro                             |  19 ++++
+ src/lib/faq.ts                                     | 103 +++++++++++++++++++++
+ src/pages/faq/[slug].astro                         |  78 ++++++++++++----
+ src/pages/faq/index.astro                          |  57 ++++++------
+ 26 files changed, 1074 insertions(+), 91 deletions(-)
+
+commit 12fd0ba7594dd1d1b8573b9453d75a7da8c0676a
+Author: Elena Kuchman <h7789280@gmail.com>
+Date:   Mon Jul 6 12:59:54 2026 +0300
+
+    feat: migrate landing to Astro + SEO/content-hub foundation
+    
+    - Astro 5 static project (was monolithic index.html → docs/legacy-index.html)
+    - Base.astro layout: verbatim CSS/fonts/scroll-reveal + per-page SEO props
+    - Landing split into 10 components (HTML 1:1, all 38 SVGs preserved)
+    - SEO: @astrojs/sitemap, robots.txt, canonical, fixed OG url → start.soulbook.life,
+      favicon + temporary og-cover, JSON-LD WebSite + SoftwareApplication (€9/mo)
+    - Content Collections blog + faq (Zod schema) with list/[slug] routes,
+      Article/BreadcrumbList + FAQPage JSON-LD; draft demo entries (noindex, off-sitemap)
+    - vercel.json pins Astro framework
+    
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+ .gitignore                           |   10 +
+ CLAUDE.md                            |  108 +
+ astro.config.mjs                     |   15 +
+ index.html => docs/legacy-index.html |    0
+ package-lock.json                    | 5542 ++++++++++++++++++++++++++++++++++
+ package.json                         |   16 +
+ public/favicon.png                   |  Bin 0 -> 5385 bytes
+ public/og-cover.png                  |  Bin 0 -> 145915 bytes
+ public/robots.txt                    |    4 +
+ src/components/AiGuide.astro         |   16 +
+ src/components/Difference.astro      |   12 +
+ src/components/Features.astro        |  100 +
+ src/components/Final.astro           |   11 +
+ src/components/Footer.astro          |    5 +
+ src/components/Hero.astro            |   11 +
+ src/components/Pain.astro            |   14 +
+ src/components/Solution.astro        |    9 +
+ src/components/Steps.astro           |   10 +
+ src/components/Teachings.astro       |   21 +
+ src/content.config.ts                |   28 +
+ src/content/blog/demo-post.md        |   15 +
+ src/content/faq/demo-question.md     |   11 +
+ src/layouts/Base.astro               |  243 ++
+ src/pages/blog/[slug].astro          |   72 +
+ src/pages/blog/index.astro           |   37 +
+ src/pages/faq/[slug].astro           |   60 +
+ src/pages/faq/index.astro            |   58 +
+ src/pages/index.astro                |   63 +
+ tsconfig.json                        |    5 +
+ vercel.json                          |    6 +
+ 30 files changed, 6502 insertions(+)
+
+commit 18642717c46aef8ff211eccd8fa98d32f846785e
+Author: Elena Kuchman <h7789280@gmail.com>
+Date:   Fri Jul 3 13:03:02 2026 +0300
+
+    chore: ignore .env files (keep .env.example as template)
+    
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+ .gitignore | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+commit 23f5df7d5482e9a21ac8db69426d71351f699cc6
+Author: Elena Kuchman <h7789280@gmail.com>
+Date:   Thu Jul 2 18:12:38 2026 +0300
+
+    Ребренд лендинга: Книга Души → Вершина Души + CTA на Telegram-бот
+    
+    - Все UI/meta/title/OG-тексты переименованы (склонения RU: Вершина/Вершины/Вершине)
+    - 4 CTA-кнопки перенаправлены с приложения (soulbook.life) на бота @Soulbook2_bot
+    - Метафора «книги» перефразирована в CTA-семью «Открой путь к себе»
+    
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+ index.html | 32 ++++++++++++++++----------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
+
+commit 4cfd13af1fe7865158e9836a257e9ebc49cc0868
+Author: Elena Kuchman <h7789280@gmail.com>
+Date:   Fri Jun 19 22:21:08 2026 +0300
+
+    Landing page for start.soulbook.life
+
+ index.html | 412 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 412 insertions(+)
