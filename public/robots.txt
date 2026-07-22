@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://start.soulbook.life/sitemap-index.xml
+Sitemap: https://apexsoul.life/sitemap-index.xml

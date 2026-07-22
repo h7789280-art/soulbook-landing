@@ -3,7 +3,12 @@
 Маркетинговый лендинг + контент-хаб (блог / FAQ) для **«Вершина Души» / Apex Soul**.
 Отдельный проект, НЕ часть основного приложения (`numerolog-app`).
 
-- **Домен:** https://start.soulbook.life
+- **Основной домен:** https://apexsoul.life (решение владельца от 22.07.2026).
+  Старый https://start.soulbook.life пока продолжает работать, редиректы не включены.
+- **Приложение:** сейчас https://soulbook.life, в будущем https://app.apexsoul.life
+  (переключение — этап 2, правка только `APP_URL` в `src/lib/site.ts`).
+- **Публичный бренд:** «Вершина Души» (ru) / Apex Soul (en). Технические
+  идентификаторы (репозиторий, Supabase, Telegram-бот, таблицы, переменные) НЕ ребрендим.
 - **Ветка деплоя:** `master` (НЕ `main`).
 - **Хостинг:** Vercel (framework preset `astro`, см. `vercel.json`).
 
@@ -32,6 +37,7 @@ src/
     faq/[slug].astro      ← страница вопроса: крошки + ответ + «Похожие» + CTA + Article/BreadcrumbList
   components/Cta.astro    ← общий CTA контент-хаба (ведёт в бота)
   lib/faq.ts              ← Question Engine: CATEGORY_LABELS, вывод description, группировка
+  lib/site.ts             ← публичные адреса: SITE_URL (домен лендинга), APP_URL, BOT_URL
   content/
     blog/*.md             ← статьи
     faq/*.md              ← вопросы (Question Engine)
@@ -51,7 +57,9 @@ docs/legacy-index.html    ← исходный монолитный лендин
   `docs/legacy-index.html`.
 - **SEO на каждой странице через `Base.astro`:** `title`, `description`, `canonical`,
   `ogType`, `ogImage`, `noindex` передаются пропсами. База canonical/OG —
-  `https://start.soulbook.life` (задано в `astro.config.mjs → site`).
+  `SITE_URL` из `src/lib/site.ts` (= `https://apexsoul.life`). То же значение
+  продублировано в `astro.config.mjs → site` (конфиг .mjs не импортирует .ts)
+  и в `public/robots.txt`. **Смена домена = правка ровно этих трёх мест.**
 - **Раздел контент-хаба называется «База знаний».** URL остаётся `/faq/` (и `/faq/<slug>/`) —
   переименование только в представлении, слаги и sitemap НЕ меняются. Индекс `/faq/`: H1 =
   «База знаний», `<title>` = «База знаний — Вершина Души». На страницах вопросов хлебная

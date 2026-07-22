@@ -1,5 +1,6 @@
 ---
 import Footer from '../components/Footer.astro';
+import { SITE_URL } from '../lib/site';
 
 export interface Props {
   title?: string;
@@ -11,7 +12,7 @@ export interface Props {
   noindex?: boolean;
 }
 
-const site = 'https://start.soulbook.life';
+const site = SITE_URL;
 const {
   title = 'Вершина Души — AI-проводник твоей души',
   description = 'Девять древних учений в одном приложении и личный AI-проводник, который заменяет консультанта и всегда рядом — 24/7. Матрица Судьбы, нумерология, астрология, Таро, Human Design, Сюцай и не только. Понимай себя, отношения, финансы и своих детей.',

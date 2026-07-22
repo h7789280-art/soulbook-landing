@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Cta from '../../components/Cta.astro';
 import { categoryLabel, faqDescription } from '../../lib/faq';
+import { SITE_URL } from '../../lib/site';
 
 export async function getStaticPaths() {
   const items = (await getCollection('faq')).filter((i) => !i.data.draft);
@@ -12,7 +13,7 @@ export async function getStaticPaths() {
 const { item } = Astro.props;
 const { Content } = await render(item);
 
-const site = 'https://start.soulbook.life';
+const site = SITE_URL;
 const faqPath = '/faq/';
 const path = `/faq/${item.id}/`;
 const url = new URL(path, site).href;
